@@ -15,7 +15,6 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // 🔴 Erros de validação (@Valid)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ValidationError handleValidationErrors(
@@ -47,7 +46,6 @@ public class GlobalExceptionHandler {
                 .body("Erro de integridade no banco de dados.");
     }
 
-    // 🔴 Erro de regra de negócio
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(BusinessException.class)
     public ApiError handleBusinessException(
@@ -62,7 +60,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-    // 🔴 Erro genérico (fallback)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public ApiError handleGenericException(
@@ -73,6 +70,20 @@ public class GlobalExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Internal Server Error",
                 "Erro inesperado",
+                request.getRequestURI()
+        );
+    }
+
+    @ExceptionHandler(CpfInvalidoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiError handleCpfInvalidoException(
+            CpfInvalidoException ex,
+            HttpServletRequest request) {
+
+        return new ApiError(
+                HttpStatus.NOT_FOUND.value(),
+                "CPF inválido",
+                ex.getMessage(),
                 request.getRequestURI()
         );
     }

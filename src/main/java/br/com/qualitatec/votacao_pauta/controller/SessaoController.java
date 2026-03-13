@@ -1,5 +1,6 @@
 package br.com.qualitatec.votacao_pauta.controller;
 
+import br.com.qualitatec.votacao_pauta.domain.Voto;
 import br.com.qualitatec.votacao_pauta.mapper.SessaoMapper;
 import br.com.qualitatec.votacao_pauta.model.SessaoRequest;
 import br.com.qualitatec.votacao_pauta.model.SessaoResponse;
@@ -32,6 +33,11 @@ public class SessaoController {
     public SessaoResponse buscar(@PathVariable Long id) {
         service.buscarPorId(id);
         return service.buscarPorId(id);
+    }
+
+    @GetMapping("/buscar-sessoes-ativas")
+    public List<SessaoResponse> listarSessoesAtivas() {
+        return service.listarSessoesAtivas();
     }
 
     @DeleteMapping("/{id}/deletar")

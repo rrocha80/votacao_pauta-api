@@ -32,7 +32,7 @@ public class SessaoServiceImpl implements SessaoService {
         sessaoEntity.setDataHoraFim(sessaoEntity.getDataHoraInicio().plusMinutes(request.getDuracaoMinutos()));
 
         var existeSessaoAberta = repository.existsSessaoAtiva(request.getPautaId(), LocalDateTime.now());
-        if (existeSessaoAberta) {
+        if (existeSessaoAberta != null && existeSessaoAberta > 0L) {
             throw new BusinessException("Já existe uma sessão aberta para esta pauta");
         }
 
@@ -66,5 +66,15 @@ public class SessaoServiceImpl implements SessaoService {
     @Override
     public void deletar(Long id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public List<SessaoResponse> listarSessoesAtivas() {
+        return repository.findSessoesAtivas(LocalDateTime.now()).stream()
+                .map(sessao -> {
+                    var pauta = pautaService.findById(sessao.getPauta().getId());
+                    return SessaoMapper.toResponse(sessao, pauta);
+                })
+                .toList();
     }
 }

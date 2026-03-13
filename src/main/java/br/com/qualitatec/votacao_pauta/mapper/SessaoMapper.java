@@ -4,6 +4,7 @@ import br.com.qualitatec.votacao_pauta.domain.Pauta;
 import br.com.qualitatec.votacao_pauta.domain.Sessao;
 import br.com.qualitatec.votacao_pauta.model.SessaoResponse;
 import org.mapstruct.Mapper;
+
 @Mapper(componentModel = "spring")
 public class SessaoMapper {
 
