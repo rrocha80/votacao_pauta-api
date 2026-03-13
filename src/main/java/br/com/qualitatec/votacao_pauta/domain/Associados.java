@@ -1,9 +1,7 @@
 package br.com.qualitatec.votacao_pauta.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import br.com.qualitatec.votacao_pauta.model.Enum.StatusAssociadoEnum;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -13,13 +11,14 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Pauta {
+public class Associados {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
 
-    private String titulo;
+    private String cpf;
 
-    private String descricao;
+    @Enumerated(EnumType.STRING)
+    private StatusAssociadoEnum status;
 }
