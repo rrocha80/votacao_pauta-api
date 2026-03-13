@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/v1/pauta")
+@RequestMapping("/v1/pautas")
 public class PautaController {
     private final PautaService pautaService;
     private final PautaMapper mapper;
