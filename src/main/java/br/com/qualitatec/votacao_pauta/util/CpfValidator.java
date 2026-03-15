@@ -6,8 +6,7 @@ public class CpfValidator {
         if (cpf == null) return false;
 
         // Remove caracteres não numéricos
-        String numbers = cpf.replaceAll("\\D", "");
-        if (numbers.length() != 11) return false;
+        String numbers = cpfSoNumeros(cpf);
 
         // Verifica se todos os dígitos são iguais
         if (numbers.chars().distinct().count() == 1) return false;
@@ -31,5 +30,23 @@ public class CpfValidator {
         // Verifica os dígitos
         return numbers.charAt(9) - '0' == firstDigit &&
                 numbers.charAt(10) - '0' == secondDigit;
+    }
+
+    public static final String formatCpf(String cpf) {
+        if (cpf == null) return null;
+            String numbers = cpf.replaceAll("\\D", "");
+        if (numbers.length() != 11) return null;
+        return String.format("%s.%s.%s-%s",
+                numbers.substring(0, 3),
+                numbers.substring(3, 6),
+                numbers.substring(6, 9),
+                numbers.substring(9));
+    }
+
+    public static final String cpfSoNumeros(String cpf) {
+        if (cpf == null)
+            return cpf.replaceAll("\\D", "");
+
+        return null;
     }
 }

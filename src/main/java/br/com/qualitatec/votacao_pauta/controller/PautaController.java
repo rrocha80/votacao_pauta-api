@@ -6,21 +6,18 @@ import br.com.qualitatec.votacao_pauta.model.PautaRequest;
 import br.com.qualitatec.votacao_pauta.model.PautaResponse;
 import br.com.qualitatec.votacao_pauta.service.PautaService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/v1/pautas")
 public class PautaController {
     private final PautaService pautaService;
     private final PautaMapper mapper;
-
-    public PautaController(PautaService pautaService, PautaMapper mapper) {
-        this.pautaService = pautaService;
-        this.mapper = mapper;
-    }
 
     @PostMapping("/salvar")
     public PautaResponse save(@Valid @RequestBody PautaRequest request) {

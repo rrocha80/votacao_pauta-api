@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/sessoes")
 @RequiredArgsConstructor
+@RequestMapping("/v1/sessoes")
 public class SessaoController {
 
     private final SessaoService service;
