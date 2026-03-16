@@ -11,7 +11,7 @@ import br.com.qualitatec.votacao_pauta.model.Enum.VotoEnum;
 import br.com.qualitatec.votacao_pauta.model.PautaResultadoResponse;
 import br.com.qualitatec.votacao_pauta.model.VotoRequest;
 import br.com.qualitatec.votacao_pauta.model.VotoResponse;
-import br.com.qualitatec.votacao_pauta.repository.AssociadosRepository;
+import br.com.qualitatec.votacao_pauta.repository.AssociadoRepository;
 import br.com.qualitatec.votacao_pauta.repository.SessaoRepository;
 import br.com.qualitatec.votacao_pauta.repository.VoroRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +37,7 @@ class VotoServiceImplTest {
     @Mock
     private VotoMapper votoMapper;
     @Mock
-    private AssociadosRepository associadosRepository;
+    private AssociadoRepository associadoRepository;
     @Mock
     private AssociadoClient associadoClient;
     @Mock
@@ -61,7 +61,7 @@ class VotoServiceImplTest {
                 .build();
 
         assertThrows(CpfInvalidoException.class, () -> service.registrarVoto(request));
-        verifyNoInteractions(sessaoRepository, votoRepository, votoMapper, associadosRepository, associadoClient);
+        verifyNoInteractions(sessaoRepository, votoRepository, votoMapper, associadoRepository, associadoClient);
     }
 
     @Test
@@ -72,7 +72,7 @@ class VotoServiceImplTest {
                 .voto("SIM")
                 .build();
 
-        when(associadosRepository.findByAssociadoAtivo(anyString())).thenReturn(true);
+        when(associadoRepository.findByAssociadoAtivo(anyString())).thenReturn(true);
         when(sessaoRepository.existsSessaoAtivaByPauta(eq(1L), any(LocalDateTime.class))).thenReturn(0L);
 
         assertThrows(BusinessException.class, () -> service.registrarVoto(request));
@@ -87,7 +87,7 @@ class VotoServiceImplTest {
                 .voto("SIM")
                 .build();
 
-        when(associadosRepository.findByAssociadoAtivo(anyString())).thenReturn(true);
+        when(associadoRepository.findByAssociadoAtivo(anyString())).thenReturn(true);
         when(sessaoRepository.existsSessaoAtivaByPauta(eq(1L), any(LocalDateTime.class))).thenReturn(2L);
         when(votoRepository.votoRealizado("12345678909", 1L)).thenReturn(true);
 
@@ -107,7 +107,7 @@ class VotoServiceImplTest {
         Voto votoEntity = Voto.builder().id(10L).cpf("12345678909").sessao(sessao).pauta(sessao.getPauta()).voto(VotoEnum.SIM).build();
         VotoResponse response = VotoResponse.builder().id(10L).cpf("12345678909").sessao(sessao).voto(VotoEnum.SIM).build();
 
-        when(associadosRepository.findByAssociadoAtivo(anyString())).thenReturn(true);
+        when(associadoRepository.findByAssociadoAtivo(anyString())).thenReturn(true);
         when(sessaoRepository.existsSessaoAtivaByPauta(eq(1L), any(LocalDateTime.class))).thenReturn(2L);
         when(votoRepository.votoRealizado("12345678909", 1L)).thenReturn(false);
         when(sessaoRepository.findById(2L)).thenReturn(Optional.of(sessao));

@@ -10,7 +10,7 @@ import br.com.qualitatec.votacao_pauta.model.Enum.VotoEnum;
 import br.com.qualitatec.votacao_pauta.model.PautaResultadoResponse;
 import br.com.qualitatec.votacao_pauta.model.VotoRequest;
 import br.com.qualitatec.votacao_pauta.model.VotoResponse;
-import br.com.qualitatec.votacao_pauta.repository.AssociadosRepository;
+import br.com.qualitatec.votacao_pauta.repository.AssociadoRepository;
 import br.com.qualitatec.votacao_pauta.repository.SessaoRepository;
 import br.com.qualitatec.votacao_pauta.repository.VoroRepository;
 import br.com.qualitatec.votacao_pauta.util.CpfValidator;
@@ -31,7 +31,7 @@ public class VotoServiceImpl implements VotoService {
 
     private final PautaService pautaService;
 
-    private final AssociadosRepository associadosRepository;
+    private final AssociadoRepository associadoRepository;
 
     private final VotoMapper votoMapper;
 
@@ -87,7 +87,7 @@ public class VotoServiceImpl implements VotoService {
                 throw new BusinessException(ASSOCIADO_NAO_ATIVO + ": " + cpf);
             }
         } else {
-            var associadoAtivo = associadosRepository.findByAssociadoAtivo(cpfLimpo);
+            var associadoAtivo = associadoRepository.findByAssociadoAtivo(cpfLimpo);
             if (associadoAtivo == null || !associadoAtivo.booleanValue()) {
                 throw new BusinessException(ASSOCIADO_NAO_ATIVO + ": " + cpf);
             }

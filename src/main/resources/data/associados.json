@@ -1,0 +1,118 @@
+[
+  {
+    "cpf": "12345678900",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "11122233344",
+    "status": "UNABLE_TO_VOTE"
+  },
+  {
+    "cpf": "22233344455",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "33344455566",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "55566677788",
+    "status": "UNABLE_TO_VOTE"
+  },
+  {
+    "cpf": "66677788899",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "77788899900",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "88899900011",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "99900011122",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "10120230340",
+    "status": "UNABLE_TO_VOTE"
+  },
+  {
+    "cpf": "20230340450",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "30340450560",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "40450560670",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "50560670780",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "60670780890",
+    "status": "UNABLE_TO_VOTE"
+  },
+  {
+    "cpf": "70780890910",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "80890910120",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "90910120230",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "11223344556",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "13524635768",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "24635746879",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "35746857980",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "46857968091",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "57968079102",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "68079180213",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "79180291324",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "80291302435",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "91302413546",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "02413524657",
+    "status": "ABLE_TO_VOTE"
+  }
+]
