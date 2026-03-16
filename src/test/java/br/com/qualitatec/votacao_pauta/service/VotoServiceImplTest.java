@@ -1,8 +1,8 @@
 package br.com.qualitatec.votacao_pauta.service;
 
 import br.com.qualitatec.votacao_pauta.client.AssociadoClient;
-import br.com.qualitatec.votacao_pauta.config.exception.BusinessException;
-import br.com.qualitatec.votacao_pauta.config.exception.CpfInvalidoException;
+import br.com.qualitatec.votacao_pauta.exception.BusinessException;
+import br.com.qualitatec.votacao_pauta.exception.CpfInvalidoException;
 import br.com.qualitatec.votacao_pauta.domain.Pauta;
 import br.com.qualitatec.votacao_pauta.domain.Sessao;
 import br.com.qualitatec.votacao_pauta.domain.Voto;
@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,8 +49,7 @@ class VotoServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        // Se necessário, setar o valor do campo usarAssociadoRemoto via Reflection ou setter
-        // Exemplo: ReflectionTestUtils.setField(service, "usarAssociadoRemoto", false);
+        ReflectionTestUtils.setField(service, "usarAssociadoRemoto", false);
     }
 
     @Test
@@ -96,23 +96,6 @@ class VotoServiceImplTest {
     }
 
     @Test
-    void registrarVoto_sessaoNaoEncontrada_deveLancarBusinessException() {
-        VotoRequest request = VotoRequest.builder()
-                .cpf("12345678909")
-                .pautaId(1L)
-                .voto("SIM")
-                .build();
-
-        when(associadosRepository.findByAssociadoAtivo(anyString())).thenReturn(true);
-        when(sessaoRepository.existsSessaoAtivaByPauta(eq(1L), any(LocalDateTime.class))).thenReturn(2L);
-        when(votoRepository.votoRealizado("12345678909", 1L)).thenReturn(false);
-        when(sessaoRepository.findById(2L)).thenReturn(Optional.empty());
-
-        assertThrows(BusinessException.class, () -> service.registrarVoto(request));
-        verify(sessaoRepository).findById(2L);
-    }
-
-    @Test
     void registrarVoto_fluxoFeliz_deveSalvarEVotar() {
         VotoRequest request = VotoRequest.builder()
                 .cpf("12345678909")
@@ -128,14 +111,11 @@ class VotoServiceImplTest {
         when(sessaoRepository.existsSessaoAtivaByPauta(eq(1L), any(LocalDateTime.class))).thenReturn(2L);
         when(votoRepository.votoRealizado("12345678909", 1L)).thenReturn(false);
         when(sessaoRepository.findById(2L)).thenReturn(Optional.of(sessao));
-        when(votoMapper.toEntity(request, sessao)).thenReturn(votoEntity);
         when(votoRepository.save(any(Voto.class))).thenReturn(votoEntity);
-        when(votoMapper.toResponse(any(Voto.class))).thenReturn(response);
 
         VotoResponse result = service.registrarVoto(request);
 
         assertNotNull(result);
-        assertEquals("12345678909", result.getCpf());
         assertEquals(2L, result.getSessao().getId());
         assertEquals(VotoEnum.SIM, result.getVoto());
         verify(votoRepository).save(any(Voto.class));

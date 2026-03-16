@@ -1,4 +1,4 @@
-package br.com.qualitatec.votacao_pauta.config.exception;
+package br.com.qualitatec.votacao_pauta.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;

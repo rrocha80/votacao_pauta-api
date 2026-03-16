@@ -1,4 +1,4 @@
-package br.com.qualitatec.votacao_pauta.config.exception;
+package br.com.qualitatec.votacao_pauta.exception;
 
 public class CpfInvalidoException extends RuntimeException {
     public CpfInvalidoException(String message) {

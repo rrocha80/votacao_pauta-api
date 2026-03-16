@@ -1,26 +1,24 @@
-package br.com.qualitatec.votacao_pauta.config.exception;
+package br.com.qualitatec.votacao_pauta.exception;
 
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @Getter
-public class ValidationError {
+public class ApiError {
 
     private int status;
     private String error;
-    private Map<String, String> fields;
+    private String message;
     private String path;
     private LocalDateTime timestamp;
 
-    public ValidationError(int status, String error,
-                           Map<String, String> fields, String path) {
+    public ApiError(int status, String error, String message, String path) {
         this.status = status;
         this.error = error;
-        this.fields = fields;
+        this.message = message;
         this.path = path;
         this.timestamp = LocalDateTime.now();
     }
-}
 
+}

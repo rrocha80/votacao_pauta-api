@@ -1,6 +1,6 @@
 package br.com.qualitatec.votacao_pauta.service;
 
-import br.com.qualitatec.votacao_pauta.config.exception.BusinessException;
+import br.com.qualitatec.votacao_pauta.exception.BusinessException;
 import br.com.qualitatec.votacao_pauta.domain.Pauta;
 import br.com.qualitatec.votacao_pauta.domain.Sessao;
 import br.com.qualitatec.votacao_pauta.mapper.SessaoMapper;

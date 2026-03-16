@@ -1,8 +1,8 @@
 package br.com.qualitatec.votacao_pauta.service;
 
 import br.com.qualitatec.votacao_pauta.client.AssociadoClient;
-import br.com.qualitatec.votacao_pauta.config.exception.BusinessException;
-import br.com.qualitatec.votacao_pauta.config.exception.CpfInvalidoException;
+import br.com.qualitatec.votacao_pauta.exception.BusinessException;
+import br.com.qualitatec.votacao_pauta.exception.CpfInvalidoException;
 import br.com.qualitatec.votacao_pauta.domain.Pauta;
 import br.com.qualitatec.votacao_pauta.domain.Voto;
 import br.com.qualitatec.votacao_pauta.mapper.VotoMapper;
@@ -61,7 +61,7 @@ public class VotoServiceImpl implements VotoService {
             throw new BusinessException(SESSAO_NAO_ATIVA + ": " + voto.getPautaId());
         }
 
-        var votoRealizado = votoRepository.votoRealizado(voto.getCpf(), voto.getPautaId());
+        var votoRealizado = votoRepository.votoRealizado(CpfValidator.cpfSoNumeros(voto.getCpf()), voto.getPautaId());
 
         if (votoRealizado) {
             throw new BusinessException(VOTO_JA_COMPUTADO);
@@ -80,14 +80,14 @@ public class VotoServiceImpl implements VotoService {
     }
 
     private void validarAssociado(String cpf) {
+        String cpfLimpo = CpfValidator.cpfSoNumeros(cpf);
         if (usarAssociadoRemoto) {
-            String cpfLimpo = CpfValidator.cpfSoNumeros(cpf);
             var associadoResponse = associadoClient.buscarUsuarioPorCpf(cpfLimpo);
             if (associadoResponse == null || !HABILITADO_PRA_VOTO.equals(associadoResponse.toString())) {
                 throw new BusinessException(ASSOCIADO_NAO_ATIVO + ": " + cpf);
             }
         } else {
-            var associadoAtivo = associadosRepository.findByAssociadoAtivo(cpf);
+            var associadoAtivo = associadosRepository.findByAssociadoAtivo(cpfLimpo);
             if (associadoAtivo == null || !associadoAtivo.booleanValue()) {
                 throw new BusinessException(ASSOCIADO_NAO_ATIVO + ": " + cpf);
             }
