@@ -13,7 +13,7 @@ public interface SessaoRepository extends JpaRepository<Sessao, Long> {
     @Query("SELECT s.id " +
             "FROM Sessao s " +
             "WHERE s.pauta.id = :pautaId AND s.dataHoraFim > :now")
-    Long existsSessaoAtiva(Long pautaId, LocalDateTime now);
+    Long existsSessaoAtivaByPauta(Long pautaId, LocalDateTime now);
 
     @Query("SELECT s " +
             "FROM Sessao s " +

@@ -16,4 +16,5 @@ public interface SessaoService {
     void deletar(Long id);
 
     List<SessaoResponse> listarSessoesAtivas();
+
 }

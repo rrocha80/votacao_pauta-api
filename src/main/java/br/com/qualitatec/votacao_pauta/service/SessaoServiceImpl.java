@@ -15,9 +15,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SessaoServiceImpl implements SessaoService {
 
-    private final SessaoRepository repository;
+    private final SessaoRepository sessaoRepository;
     private final SessaoMapper mapper;
     private final PautaService pautaService;
+
+    private final String SESSAO_ABERTA_PARA_PAUTA = "Já existe uma sessão aberta para esta pauta";
 
     @Override
     public SessaoResponse criarSessao(SessaoRequest request) {
@@ -31,12 +33,12 @@ public class SessaoServiceImpl implements SessaoService {
         sessaoEntity.setDataHoraInicio(LocalDateTime.now());
         sessaoEntity.setDataHoraFim(sessaoEntity.getDataHoraInicio().plusMinutes(request.getDuracaoMinutos()));
 
-        var existeSessaoAberta = repository.existsSessaoAtiva(request.getPautaId(), LocalDateTime.now());
+        var existeSessaoAberta = sessaoRepository.existsSessaoAtivaByPauta(request.getPautaId(), LocalDateTime.now());
         if (existeSessaoAberta != null && existeSessaoAberta > 0L) {
-            throw new BusinessException("Já existe uma sessão aberta para esta pauta");
+            throw new BusinessException(SESSAO_ABERTA_PARA_PAUTA);
         }
 
-        repository.save(sessaoEntity);
+        sessaoRepository.save(sessaoEntity);
 
         var response = SessaoMapper.toResponse(sessaoEntity, pleitoEntity);
 
@@ -45,7 +47,7 @@ public class SessaoServiceImpl implements SessaoService {
 
     @Override
     public List<SessaoResponse> listarTodas() {
-        var sessoes = repository.findAll();
+        var sessoes = sessaoRepository.findAll();
         return sessoes.stream()
                 .map(sessao -> {
                     var pauta = pautaService.findById(sessao.getPauta().getId());
@@ -56,7 +58,7 @@ public class SessaoServiceImpl implements SessaoService {
 
     @Override
     public SessaoResponse buscarPorId(Long id) {
-        var sessao = repository.findById(id)
+        var sessao = sessaoRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("Sessão não encontrada com id: " + id));
 
         var pauta = pautaService.findById(sessao.getPauta().getId());
@@ -65,12 +67,12 @@ public class SessaoServiceImpl implements SessaoService {
 
     @Override
     public void deletar(Long id) {
-        repository.deleteById(id);
+        sessaoRepository.deleteById(id);
     }
 
     @Override
     public List<SessaoResponse> listarSessoesAtivas() {
-        return repository.findSessoesAtivas(LocalDateTime.now()).stream()
+        return sessaoRepository.findSessoesAtivas(LocalDateTime.now()).stream()
                 .map(sessao -> {
                     var pauta = pautaService.findById(sessao.getPauta().getId());
                     return SessaoMapper.toResponse(sessao, pauta);

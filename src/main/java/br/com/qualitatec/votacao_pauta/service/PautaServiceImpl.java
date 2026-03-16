@@ -3,19 +3,17 @@ package br.com.qualitatec.votacao_pauta.service;
 import br.com.qualitatec.votacao_pauta.config.exception.BusinessException;
 import br.com.qualitatec.votacao_pauta.domain.Pauta;
 import br.com.qualitatec.votacao_pauta.repository.PautaRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class PautaServiceImpl implements PautaService {
 
     private final PautaRepository pautaRepository;
-
-    public PautaServiceImpl(PautaRepository pautaRepository) {
-        this.pautaRepository = pautaRepository;
-    }
 
     @Override
     public Pauta save(Pauta pauta) {

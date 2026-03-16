@@ -47,7 +47,7 @@ class SessaoServiceImplTest {
         sessao.setPauta(pauta);
 
         when(pautaService.findById(1L)).thenReturn(pauta);
-        when(repository.existsSessaoAtiva(eq(1L), any(LocalDateTime.class))).thenReturn(0L);
+        when(repository.existsSessaoAtivaByPauta(eq(1L), any(LocalDateTime.class))).thenReturn(0L);
         when(repository.save(any(Sessao.class))).thenReturn(sessao);
 
         SessaoResponse response = service.criarSessao(request);
@@ -69,7 +69,7 @@ class SessaoServiceImplTest {
         sessao.setPauta(pauta);
 
         when(pautaService.findById(1L)).thenReturn(pauta);
-        when(repository.existsSessaoAtiva(eq(1L), any(LocalDateTime.class))).thenReturn(0L);
+        when(repository.existsSessaoAtivaByPauta(eq(1L), any(LocalDateTime.class))).thenReturn(0L);
         when(repository.save(any(Sessao.class))).thenReturn(sessao);
 
         SessaoResponse response = service.criarSessao(request);
@@ -92,7 +92,7 @@ class SessaoServiceImplTest {
         sessao.setPauta(pauta);
 
         when(pautaService.findById(1L)).thenReturn(pauta);
-        when(repository.existsSessaoAtiva(eq(1L), any(LocalDateTime.class))).thenReturn(1L);
+        when(repository.existsSessaoAtivaByPauta(eq(1L), any(LocalDateTime.class))).thenReturn(1L);
 
         assertThrows(BusinessException.class, () -> service.criarSessao(request));
         verify(repository, never()).save(any());

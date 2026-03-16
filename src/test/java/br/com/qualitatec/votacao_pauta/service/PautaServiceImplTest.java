@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PautaTest {
+class PautaServiceImplTest {
 
     @Test
     void testBuilderAndGetters() {

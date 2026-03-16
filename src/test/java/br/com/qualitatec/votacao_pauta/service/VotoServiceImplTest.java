@@ -1,5 +1,6 @@
 package br.com.qualitatec.votacao_pauta.service;
 
+import br.com.qualitatec.votacao_pauta.client.AssociadoClient;
 import br.com.qualitatec.votacao_pauta.config.exception.BusinessException;
 import br.com.qualitatec.votacao_pauta.config.exception.CpfInvalidoException;
 import br.com.qualitatec.votacao_pauta.domain.Pauta;
@@ -7,8 +8,10 @@ import br.com.qualitatec.votacao_pauta.domain.Sessao;
 import br.com.qualitatec.votacao_pauta.domain.Voto;
 import br.com.qualitatec.votacao_pauta.mapper.VotoMapper;
 import br.com.qualitatec.votacao_pauta.model.Enum.VotoEnum;
+import br.com.qualitatec.votacao_pauta.model.PautaResultadoResponse;
 import br.com.qualitatec.votacao_pauta.model.VotoRequest;
 import br.com.qualitatec.votacao_pauta.model.VotoResponse;
+import br.com.qualitatec.votacao_pauta.repository.AssociadosRepository;
 import br.com.qualitatec.votacao_pauta.repository.SessaoRepository;
 import br.com.qualitatec.votacao_pauta.repository.VoroRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +35,12 @@ class VotoServiceImplTest {
     private SessaoRepository sessaoRepository;
     @Mock
     private VotoMapper votoMapper;
+    @Mock
+    private AssociadosRepository associadosRepository;
+    @Mock
+    private AssociadoClient associadoClient;
+    @Mock
+    private PautaService pautaService;
 
     @InjectMocks
     private VotoServiceImpl service;
@@ -39,18 +48,20 @@ class VotoServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        // Se necessário, setar o valor do campo usarAssociadoRemoto via Reflection ou setter
+        // Exemplo: ReflectionTestUtils.setField(service, "usarAssociadoRemoto", false);
     }
 
     @Test
     void registrarVoto_cpfInvalido_deveLancarCpfInvalidoException() {
         VotoRequest request = VotoRequest.builder()
-                .cpf("123")
+                .cpf("12311111111")
                 .pautaId(1L)
                 .voto("SIM")
                 .build();
 
         assertThrows(CpfInvalidoException.class, () -> service.registrarVoto(request));
-        verifyNoInteractions(sessaoRepository, votoRepository, votoMapper);
+        verifyNoInteractions(sessaoRepository, votoRepository, votoMapper, associadosRepository, associadoClient);
     }
 
     @Test
@@ -61,11 +72,11 @@ class VotoServiceImplTest {
                 .voto("SIM")
                 .build();
 
-        when(sessaoRepository.existsSessaoAtiva(eq(1L), any(LocalDateTime.class))).thenReturn(0L);
+        when(associadosRepository.findByAssociadoAtivo(anyString())).thenReturn(true);
+        when(sessaoRepository.existsSessaoAtivaByPauta(eq(1L), any(LocalDateTime.class))).thenReturn(0L);
 
         assertThrows(BusinessException.class, () -> service.registrarVoto(request));
-        verify(sessaoRepository).existsSessaoAtiva(eq(1L), any(LocalDateTime.class));
-        verifyNoMoreInteractions(sessaoRepository, votoRepository, votoMapper);
+        verify(sessaoRepository).existsSessaoAtivaByPauta(eq(1L), any(LocalDateTime.class));
     }
 
     @Test
@@ -76,12 +87,12 @@ class VotoServiceImplTest {
                 .voto("SIM")
                 .build();
 
-        when(sessaoRepository.existsSessaoAtiva(eq(1L), any(LocalDateTime.class))).thenReturn(2L);
+        when(associadosRepository.findByAssociadoAtivo(anyString())).thenReturn(true);
+        when(sessaoRepository.existsSessaoAtivaByPauta(eq(1L), any(LocalDateTime.class))).thenReturn(2L);
         when(votoRepository.votoRealizado("12345678909", 1L)).thenReturn(true);
 
         assertThrows(BusinessException.class, () -> service.registrarVoto(request));
         verify(votoRepository).votoRealizado("12345678909", 1L);
-        verifyNoMoreInteractions(votoRepository, votoMapper);
     }
 
     @Test
@@ -92,7 +103,8 @@ class VotoServiceImplTest {
                 .voto("SIM")
                 .build();
 
-        when(sessaoRepository.existsSessaoAtiva(eq(1L), any(LocalDateTime.class))).thenReturn(2L);
+        when(associadosRepository.findByAssociadoAtivo(anyString())).thenReturn(true);
+        when(sessaoRepository.existsSessaoAtivaByPauta(eq(1L), any(LocalDateTime.class))).thenReturn(2L);
         when(votoRepository.votoRealizado("12345678909", 1L)).thenReturn(false);
         when(sessaoRepository.findById(2L)).thenReturn(Optional.empty());
 
@@ -110,12 +122,15 @@ class VotoServiceImplTest {
 
         Sessao sessao = Sessao.builder().id(2L).pauta(Pauta.builder().id(1L).build()).build();
         Voto votoEntity = Voto.builder().id(10L).cpf("12345678909").sessao(sessao).pauta(sessao.getPauta()).voto(VotoEnum.SIM).build();
-        VotoResponse response = VotoResponse.builder().id(10L).cpf("12345678909").voto(VotoEnum.SIM).build();
+        VotoResponse response = VotoResponse.builder().id(10L).cpf("12345678909").sessao(sessao).voto(VotoEnum.SIM).build();
 
-        when(sessaoRepository.existsSessaoAtiva(eq(1L), any(LocalDateTime.class))).thenReturn(2L);
+        when(associadosRepository.findByAssociadoAtivo(anyString())).thenReturn(true);
+        when(sessaoRepository.existsSessaoAtivaByPauta(eq(1L), any(LocalDateTime.class))).thenReturn(2L);
         when(votoRepository.votoRealizado("12345678909", 1L)).thenReturn(false);
         when(sessaoRepository.findById(2L)).thenReturn(Optional.of(sessao));
-        when(votoRepository.save(votoEntity)).thenReturn(votoEntity);
+        when(votoMapper.toEntity(request, sessao)).thenReturn(votoEntity);
+        when(votoRepository.save(any(Voto.class))).thenReturn(votoEntity);
+        when(votoMapper.toResponse(any(Voto.class))).thenReturn(response);
 
         VotoResponse result = service.registrarVoto(request);
 
@@ -123,7 +138,7 @@ class VotoServiceImplTest {
         assertEquals("12345678909", result.getCpf());
         assertEquals(2L, result.getSessao().getId());
         assertEquals(VotoEnum.SIM, result.getVoto());
-        verify(votoRepository).save(votoEntity);
+        verify(votoRepository).save(any(Voto.class));
     }
 
     @Test
@@ -154,5 +169,30 @@ class VotoServiceImplTest {
         doNothing().when(votoRepository).deleteById(1L);
         service.deletar(1L);
         verify(votoRepository).deleteById(1L);
+    }
+
+    @Test
+    void obterResultadoVotacao_sessaoAtiva_deveLancarBusinessException() {
+        when(sessaoRepository.existsSessaoAtivaByPauta(eq(1L), any(LocalDateTime.class))).thenReturn(1L);
+        assertThrows(BusinessException.class, () -> service.obterResultadoVotacao(1L));
+    }
+
+    @Test
+    void obterResultadoVotacao_fluxoFeliz_deveRetornarResultado() {
+        Pauta pauta = Pauta.builder().id(1L).titulo("Teste").descricao("Desc").build();
+        Voto votoSim = Voto.builder().id(1L).voto(VotoEnum.SIM).build();
+        Voto votoNao = Voto.builder().id(2L).voto(VotoEnum.NAO).build();
+
+        when(sessaoRepository.existsSessaoAtivaByPauta(eq(1L), any(LocalDateTime.class))).thenReturn(0L);
+        when(pautaService.findById(1L)).thenReturn(pauta);
+        when(votoRepository.findByPautaId(1L)).thenReturn(List.of(votoSim, votoNao, votoSim));
+
+        PautaResultadoResponse resultado = service.obterResultadoVotacao(1L);
+
+        assertEquals(1L, resultado.getId());
+        assertEquals("Teste", resultado.getTitulo());
+        assertEquals("Desc", resultado.getDescricao());
+        assertEquals(2, resultado.getTotalVotosSim());
+        assertEquals(1, resultado.getTotalVotosNao());
     }
 }

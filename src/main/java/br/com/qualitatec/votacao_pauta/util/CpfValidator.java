@@ -44,7 +44,7 @@ public class CpfValidator {
     }
 
     public static final String cpfSoNumeros(String cpf) {
-        if (cpf == null)
+        if (cpf != null)
             return cpf.replaceAll("\\D", "");
 
         return null;

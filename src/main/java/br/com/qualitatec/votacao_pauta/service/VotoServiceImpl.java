@@ -3,8 +3,11 @@ package br.com.qualitatec.votacao_pauta.service;
 import br.com.qualitatec.votacao_pauta.client.AssociadoClient;
 import br.com.qualitatec.votacao_pauta.config.exception.BusinessException;
 import br.com.qualitatec.votacao_pauta.config.exception.CpfInvalidoException;
+import br.com.qualitatec.votacao_pauta.domain.Pauta;
 import br.com.qualitatec.votacao_pauta.domain.Voto;
 import br.com.qualitatec.votacao_pauta.mapper.VotoMapper;
+import br.com.qualitatec.votacao_pauta.model.Enum.VotoEnum;
+import br.com.qualitatec.votacao_pauta.model.PautaResultadoResponse;
 import br.com.qualitatec.votacao_pauta.model.VotoRequest;
 import br.com.qualitatec.votacao_pauta.model.VotoResponse;
 import br.com.qualitatec.votacao_pauta.repository.AssociadosRepository;
@@ -26,6 +29,8 @@ public class VotoServiceImpl implements VotoService {
 
     private final SessaoRepository sessaoRepository;
 
+    private final PautaService pautaService;
+
     private final AssociadosRepository associadosRepository;
 
     private final VotoMapper votoMapper;
@@ -41,6 +46,7 @@ public class VotoServiceImpl implements VotoService {
     private final String SESSAO_NAO_ATIVA = "Sessão não está ativa para a pauta: ";
     private final String VOTO_JA_COMPUTADO = "Voto já computado para este CPF";
     private final String VOTO_NAO_ENCONTRADO = "Voto não encontrado com id: ";
+    private final String SESSAO_ATIVA = "Não é possível obter o resultado da votação, pois a sessão está ativa";
 
     @Override
     public VotoResponse registrarVoto(VotoRequest voto) {
@@ -50,7 +56,7 @@ public class VotoServiceImpl implements VotoService {
 
         validarAssociado(voto.getCpf());
 
-        var sessaoAtiva = sessaoRepository.existsSessaoAtiva(voto.getPautaId(), LocalDateTime.now());
+        var sessaoAtiva = sessaoRepository.existsSessaoAtivaByPauta(voto.getPautaId(), LocalDateTime.now());
         if (sessaoAtiva == null || sessaoAtiva == 0L) {
             throw new BusinessException(SESSAO_NAO_ATIVA + ": " + voto.getPautaId());
         }
@@ -102,5 +108,30 @@ public class VotoServiceImpl implements VotoService {
     @Override
     public void deletar(Long id) {
         votoRepository.deleteById(id);
+    }
+
+    @Override
+    public PautaResultadoResponse obterResultadoVotacao(Long pautaId) {
+        var sessaoativa = sessaoRepository.existsSessaoAtivaByPauta(pautaId, LocalDateTime.now()); // Verifica se a sessão está ativa para a pauta
+        if (sessaoativa != null && sessaoativa > 0L) {
+            throw new BusinessException(SESSAO_ATIVA);
+        }
+        Pauta pauta = pautaService.findById(pautaId);
+        var votosRealizados = votoRepository.findByPautaId(pautaId);
+
+        long votosSim = votosRealizados.stream()
+                .filter(e -> e.getVoto() == VotoEnum.SIM)
+                .count();
+
+        long votosNao = votosRealizados.stream()
+                .filter(e -> e.getVoto() == VotoEnum.NAO)
+                .count();
+        return PautaResultadoResponse.builder()
+                .id(pauta.getId())
+                .titulo(pauta.getTitulo())
+                .descricao(pauta.getDescricao())
+                .totalVotosSim(votosSim)
+                .totalVotosNao(votosNao)
+                .build();
     }
 }

@@ -4,7 +4,9 @@ import br.com.qualitatec.votacao_pauta.domain.Pauta;
 import br.com.qualitatec.votacao_pauta.mapper.PautaMapper;
 import br.com.qualitatec.votacao_pauta.model.PautaRequest;
 import br.com.qualitatec.votacao_pauta.model.PautaResponse;
+import br.com.qualitatec.votacao_pauta.model.PautaResultadoResponse;
 import br.com.qualitatec.votacao_pauta.service.PautaService;
+import br.com.qualitatec.votacao_pauta.service.VotoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/v1/pautas")
 public class PautaController {
     private final PautaService pautaService;
+
+    private final VotoService votoService;
     private final PautaMapper mapper;
 
     @PostMapping("/salvar")
@@ -50,5 +54,10 @@ public class PautaController {
     @DeleteMapping("/{id}/deletar")
     public void delete(@PathVariable Long id) {
         pautaService.delete(id);
+    }
+
+    @GetMapping("/{id}/resultado-votacao")
+    public PautaResultadoResponse obterResultadoVotacao(@PathVariable Long id) {
+        return votoService.obterResultadoVotacao(id);
     }
 }

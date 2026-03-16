@@ -1,6 +1,5 @@
 package br.com.qualitatec.votacao_pauta.controller;
 
-import br.com.qualitatec.votacao_pauta.domain.Voto;
 import br.com.qualitatec.votacao_pauta.mapper.SessaoMapper;
 import br.com.qualitatec.votacao_pauta.model.SessaoRequest;
 import br.com.qualitatec.votacao_pauta.model.SessaoResponse;

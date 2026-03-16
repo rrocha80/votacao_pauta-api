@@ -1,6 +1,7 @@
 package br.com.qualitatec.votacao_pauta.service;
 
 import br.com.qualitatec.votacao_pauta.domain.Voto;
+import br.com.qualitatec.votacao_pauta.model.PautaResultadoResponse;
 import br.com.qualitatec.votacao_pauta.model.VotoRequest;
 import br.com.qualitatec.votacao_pauta.model.VotoResponse;
 
@@ -11,5 +12,5 @@ public interface VotoService {
     Voto buscarPorId(Long id);
     List<Voto> listarTodos();
     void deletar(Long id);
-
+    PautaResultadoResponse obterResultadoVotacao(Long pautaId);
 }
