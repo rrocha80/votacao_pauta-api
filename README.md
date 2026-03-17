@@ -20,6 +20,7 @@
 ## Utilização
 1. crie uma pauta;
 2. crie uma sessão de votação para a pauta criada;
+3. pesquise um associado no endpoint "/v1/associados" para utilizar no voto (Observar se ele está habilitado para votar ou não);
 3. vote na pauta usando um dos associados com o status ABLE_TO_VOTE (Habilitado para votar);
 4. o resultado final da pauta só estará disponível após o término da sessão de votação, não pode ter sessão ativa.
 
