@@ -15,12 +15,16 @@ public class PautaServiceImpl implements PautaService {
 
     private final PautaRepository pautaRepository;
 
+    private final String TITULO_EXISTENTE = "Pauta com título já existe";
+
+    private final String PAUTA_NAO_ENCONTRADA = "Pauta não encontrada";
+
     @Override
     public Pauta save(Pauta pauta) {
         Optional<Pauta> existe = pautaRepository.findByTituloExistente(pauta.getTitulo());
 
         if (existe.isPresent()) {
-            throw new BusinessException("Pauta com título já existe");
+            throw new BusinessException(TITULO_EXISTENTE);
         }
         return pautaRepository.save(pauta);
     }
@@ -28,7 +32,7 @@ public class PautaServiceImpl implements PautaService {
     @Override
     public Pauta findById(Long id) {
         return pautaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pauta não encontrada"));
+                .orElseThrow(() -> new RuntimeException(PAUTA_NAO_ENCONTRADA));
     }
 
     @Override

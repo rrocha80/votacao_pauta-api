@@ -18,7 +18,10 @@
 - http://localhost:8080/v3/api-docs
 
 ## Utilização
-1- crie uma pauta;
-2- crie uma sessão de votação para a pauta criada;
-3- vote na pauta usando um dos associados com o status ABLE_TO_VOTE (Habilitado para votar);
-4- o resultado final da pauta só estará disponível após o término da sessão de votação, não pode ter sessão ativa.
+1. crie uma pauta;
+2. crie uma sessão de votação para a pauta criada;
+3. vote na pauta usando um dos associados com o status ABLE_TO_VOTE (Habilitado para votar);
+4. o resultado final da pauta só estará disponível após o término da sessão de votação, não pode ter sessão ativa.
+
+Obs: Existe um parâmetro no "application.properties" chamado "usar-associado-remoto" que define se vai usar a chamada remota para o serviço de associados, caso seja false vai usar a entidade associado.
+Criei a entidade associado com 30 CPF's a maioria ABLE_TO_VOTE, mas tem alguns UNABLE_TO_VOTE (Não habilitado para votar) para testar a API.

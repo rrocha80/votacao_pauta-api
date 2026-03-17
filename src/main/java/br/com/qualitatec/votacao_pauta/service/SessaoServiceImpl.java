@@ -20,6 +20,7 @@ public class SessaoServiceImpl implements SessaoService {
     private final PautaService pautaService;
 
     private final String SESSAO_ABERTA_PARA_PAUTA = "Já existe uma sessão aberta para esta pauta";
+    private final String SESSAO_NAO_ENCONTRADA = "Sessão não encontrada com id: ";
 
     @Override
     public SessaoResponse criarSessao(SessaoRequest request) {
@@ -59,7 +60,7 @@ public class SessaoServiceImpl implements SessaoService {
     @Override
     public SessaoResponse buscarPorId(Long id) {
         var sessao = sessaoRepository.findById(id)
-                .orElseThrow(() -> new BusinessException("Sessão não encontrada com id: " + id));
+                .orElseThrow(() -> new BusinessException(SESSAO_NAO_ENCONTRADA + id));
 
         var pauta = pautaService.findById(sessao.getPauta().getId());
         return SessaoMapper.toResponse(sessao, pauta);
