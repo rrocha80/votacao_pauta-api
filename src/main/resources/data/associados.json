@@ -1,118 +1,122 @@
 [
   {
-    "cpf": "12345678900",
+    "cpf": "06807990014",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "11122233344",
+    "cpf": "52602738000",
     "status": "UNABLE_TO_VOTE"
   },
   {
-    "cpf": "22233344455",
+    "cpf": "27470590064",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "33344455566",
+    "cpf": "11240804067",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "55566677788",
+    "cpf": "06342063036",
     "status": "UNABLE_TO_VOTE"
   },
   {
-    "cpf": "66677788899",
+    "cpf": "17330248088",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "77788899900",
+    "cpf": "14442330921",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "88899900011",
+    "cpf": "59688931179",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "99900011122",
+    "cpf": "75139186780",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "10120230340",
+    "cpf": "01312189487",
     "status": "UNABLE_TO_VOTE"
   },
   {
-    "cpf": "20230340450",
+    "cpf": "81018304720",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "30340450560",
+    "cpf": "92033227367",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "40450560670",
+    "cpf": "91513936387",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "50560670780",
+    "cpf": "34701660728",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "60670780890",
+    "cpf": "37006302471",
     "status": "UNABLE_TO_VOTE"
   },
   {
-    "cpf": "70780890910",
+    "cpf": "16763635052",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "80890910120",
+    "cpf": "10941429563",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "90910120230",
+    "cpf": "47409747544",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "11223344556",
+    "cpf": "43811938495",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "13524635768",
+    "cpf": "81855020807",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "24635746879",
+    "cpf": "37512237898",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "35746857980",
+    "cpf": "71622476441",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "46857968091",
+    "cpf": "96906671499",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "57968079102",
+    "cpf": "54471968505",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "68079180213",
+    "cpf": "65613735450",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "79180291324",
+    "cpf": "33087282570",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "80291302435",
+    "cpf": "38754474094",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "91302413546",
+    "cpf": "02944998064",
     "status": "ABLE_TO_VOTE"
   },
   {
-    "cpf": "02413524657",
+    "cpf": "85487503087",
+    "status": "ABLE_TO_VOTE"
+  },
+  {
+    "cpf": "45411627095",
     "status": "ABLE_TO_VOTE"
   }
 ]
