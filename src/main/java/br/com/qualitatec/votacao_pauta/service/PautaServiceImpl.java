@@ -17,7 +17,7 @@ public class PautaServiceImpl implements PautaService {
 
     @Override
     public Pauta save(Pauta pauta) {
-        Optional<Pauta> existe = pautaRepository.findByTituloIgnoreCase(pauta.getTitulo());
+        Optional<Pauta> existe = pautaRepository.findByTituloExistente(pauta.getTitulo());
 
         if (existe.isPresent()) {
             throw new BusinessException("Pauta com título já existe");
